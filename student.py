@@ -1,19 +1,22 @@
 import sqlite3
-from flask_restful import Resource, reqparse
+
 from flask_jwt import jwt_required
+from flask_restful import Resource, reqparse
+
 
 class Student(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('regNO',
-                         required=True,
-                         help="This field cannot be left blank"
-                         )
+                        required=True,
+                        help="This field cannot be left blank"
+                        )
+
     @jwt_required()
     def get(self, name):
         student = self.find_by_name(name)
         if student:
             return student
-        return {'message':'Student not found'}
+        return {'message': 'Student not found'}
 
     @classmethod
     def find_by_name(cls, name):
@@ -26,7 +29,7 @@ class Student(Resource):
         connection.close()
 
         if row:
-            return{'student': {'name': row[0], 'regNO': row[1], 'course': row[2]}}
+            return {'student': {'name': row[0], 'regNO': row[1], 'course': row[2]}}
 
     def post(self, name):
         if self.find_by_name(name):
@@ -34,12 +37,12 @@ class Student(Resource):
 
         data = Student.parser.parse_args()
 
-        student = {'name': name, 'regNO': data['regNO'], 'course':'course'}
+        student = {'name': name, 'regNO': data['regNO'], 'course': 'course'}
 
         try:
             self.insert(student)
         except:
-            return {"message" : "An error occurred inserting the student id."}, 500  # Internal server error
+            return {"message": "An error occurred inserting the student id."}, 500  # Internal server error
 
         return student, 201
 
@@ -95,17 +98,18 @@ class Student(Resource):
         connection.commit()
         connection.close()
 
+
 class StudentList(Resource):
-     def get(self):
-         connection = sqlite3.connect('data.db')
-         cursor = connection.cursor()
+    def get(self):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
 
-         query = "SELECT * FROM students"
-         result = cursor.execute(query)
-         students = []
-         for row in result:
-             students.append({'name': row[0], 'regNO': row[1], 'course': row[2]})
+        query = "SELECT * FROM students"
+        result = cursor.execute(query)
+        students = []
+        for row in result:
+            students.append({'name': row[0], 'regNO': row[1], 'course': row[2]})
 
-         connection.close()
+        connection.close()
 
-         return {'students': students}
+        return {'students': students}
