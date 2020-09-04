@@ -1,6 +1,6 @@
 from flask import Flask
-from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
+from flask_restful import Resource, Api, reqparse
 
 from security import authenticate, identity
 
@@ -12,12 +12,14 @@ jwt = JWT(app, authenticate, identity)  # /auth
 
 students = []
 
+
 class Student(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('regNO',
-                         required=True,
-                         help="This field cannot be left blank"
-                         )
+                        required=True,
+                        help="This field cannot be left blank"
+                        )
+
     @jwt_required()
     def get(self, name):
         student = next(filter(lambda x: x['name'] == name, students), None)
@@ -42,16 +44,18 @@ class Student(Resource):
         data = Student.parser.parse_args()
 
         student = next(filter(lambda x: x['name'] == name, students), None)
-        if student is None :
+        if student is None:
             item = {'name': name, 'regNO': data['regNO'], 'course': 'CSE2001'}
             students.append(student)
         else:
             student.update(data)
         return student
 
+
 class StudentList(Resource):
     def get(self):
-        return {'students':students}
+        return {'students': students}
+
 
 api.add_resource(Student, '/student/<string:name>')
 api.add_resource(StudentList, '/students')

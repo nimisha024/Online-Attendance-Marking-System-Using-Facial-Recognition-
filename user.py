@@ -1,5 +1,6 @@
 import sqlite3
 
+
 class User:
     def __init__(self, _id, username, password):
         self.id = _id
@@ -8,7 +9,9 @@ class User:
 
     @classmethod
     def find_by_username(cls, username):
-        connection = sqlite3.connect('data.db')
+        import os
+        db_file = os.path.join(os.getcwd(), 'db', 'data.db')
+        connection = sqlite3.connect(db_file)
         cursor = connection.cursor()
 
         query = "SELECT * FROM users WHERE username=?"
