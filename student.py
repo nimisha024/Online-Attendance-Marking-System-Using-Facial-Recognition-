@@ -1,5 +1,3 @@
-import sqlite3
-
 from flask_jwt import jwt_required
 from flask_restful import Resource, reqparse
 
@@ -20,8 +18,8 @@ class Student(Resource):
             return student
         return {'message': 'Student not found'}
 
-    @classmethod
-    def find_by_name(cls, name):
+    @staticmethod
+    def find_by_name(name):
         connection = get_connection()
         cursor = connection.cursor()
 
