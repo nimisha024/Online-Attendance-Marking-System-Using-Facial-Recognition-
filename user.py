@@ -2,6 +2,8 @@ import sqlite3
 
 from flask_restful import Resource, reqparse
 
+from db.db_util import get_connection
+
 
 class User:
     def __init__(self, _id, username, password):
@@ -11,12 +13,10 @@ class User:
 
     @classmethod
     def find_by_username(cls, username):
-        import os
-        db_file = os.path.join(os.getcwd(), 'db', 'data.db')
-        connection = sqlite3.connect(db_file)
+        connection = get_connection()
         cursor = connection.cursor()
 
-        query = "SELECT * FROM users WHERE username=?"
+        query = 'SELECT * FROM users WHERE username=?'
         result = cursor.execute(query, (username,))
         row = result.fetchone()
         if row:
@@ -29,10 +29,10 @@ class User:
 
     @classmethod
     def find_by_id(cls, _id):
-        connection = sqlite3.connect('data.db')
+        connection = get_connection()
         cursor = connection.cursor()
 
-        query = "SELECT * FROM users WHERE id=?"
+        query = 'SELECT * FROM users WHERE id=?'
         result = cursor.execute(query, (_id,))
         row = result.fetchone()
         if row:
@@ -49,27 +49,27 @@ class UserRegister(Resource):
     parser.add_argument('username',
                         type=str,
                         required=True,
-                        help="This field cannot be left blank."
+                        help='This field cannot be left blank.'
                         )
     parser.add_argument('password',
                         type=str,
                         required=True,
-                        help="This field cannot be left blank."
+                        help='This field cannot be left blank.'
                         )
 
     def post(self):
         data = UserRegister.parser.parse_args()
 
         if User.find_by_username(data['username']):
-            return {"message": "A user with same username exists"}, 400
+            return {'message': 'A user with same username exists'}, 400
 
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
-        query = "INSERT INTO users VALUES (NULL, ?, ?)"
+        query = 'INSERT INTO users VALUES (NULL, ?, ?)'
         cursor.execute(query, (data['username'], data['password']))
 
         connection.commit()
         connection.close()
 
-        return {"message": "User created successfully."}, 201
+        return {'message': 'User created successfully.'}, 201
