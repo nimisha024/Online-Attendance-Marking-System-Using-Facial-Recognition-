@@ -8,7 +8,7 @@
 
 	<title>Dashboard</title>
 
-	<link href="css/app.css" rel="stylesheet">
+	<link href="../static/css/app.css" rel="stylesheet">
 </head>
 
 <body>
@@ -101,7 +101,7 @@
               				</a>
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
-                				<img src="img/diary.png" class="avatar img-fluid rounded mr-1" alt="Charles Hall" /> <span class="text-dark">Student Name</span>
+                				<img src="../static/img/diary.png" class="avatar img-fluid rounded mr-1" alt="Charles Hall" /> <span class="text-dark">Student Name</span>
              	 			</a>
 							<div class="dropdown-menu dropdown-menu-right">
 								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile</a>
@@ -117,100 +117,60 @@
 			</nav>
 
 			<main class="content">
-				<div class="container-fluid p-0">
-
-					<h1 class="h3 mb-3">Welcome</h1>
-					
-					<div class="row">
-						<div class="d-flex">
-							<div class="w-100">
-								<div class="row">
-									
-									<div class="col-sm-3 col-6">
-										<div class="card">
-											<div class="card-body">
-												<div class="d-flex justify-content-center">
-													<img src="img/diary.png" class="img-fluid" width="50%">
-												</div>
-												<h3 class="mt-3 mb-0 d-flex justify-content-center">Course Name</h3>
-												<button class="btn btn-primary w-100 mt-3">Attend</button>
-											</div>
-										</div>
-									</div>
-
-									<div class="col-sm-3 col-6">
-										<div class="card">
-											<div class="card-body">
-												<div class="d-flex justify-content-center">
-													<img src="img/diary.png" class="img-fluid" width="50%">
-												</div>
-												<h3 class="mt-3 mb-0 d-flex justify-content-center">Course Name</h3>
-												<button class="btn btn-primary w-100 mt-3">Attend</button>
-											</div>
-										</div>
-									</div>
-									
-									<div class="col-sm-3 col-6">
-										<div class="card">
-											<div class="card-body">
-												<div class="d-flex justify-content-center">
-													<img src="img/diary.png" class="img-fluid" width="50%">
-												</div>
-												<h3 class="mt-3 mb-0 d-flex justify-content-center">Course Name</h3>
-												<button class="btn btn-primary w-100 mt-3">Attend</button>
-											</div>
-										</div>
-									</div>
-
-									<div class="col-sm-3 col-6">
-										<div class="card">
-											<div class="card-body">
-												<div class="d-flex justify-content-center">
-													<img src="img/diary.png" class="img-fluid" width="50%">
-												</div>
-												<h3 class="mt-3 mb-0 d-flex justify-content-center">Course Name</h3>
-												<button class="btn btn-primary w-100 mt-3">Attend</button>
-											</div>
-										</div>
-									</div>
-
-									<div class="col-sm-3 col-6">
-										<div class="card">
-											<div class="card-body">
-												<div class="d-flex justify-content-center">
-													<img src="img/diary.png" class="img-fluid" width="50%">
-												</div>
-												<h3 class="mt-3 mb-0 d-flex justify-content-center">Course Name</h3>
-												<button class="btn btn-primary w-100 mt-3">Attend</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
+				<div class="container-fluid d-flex justify-content-center align-self-center" style="flex-direction: column;">
+                    <div class="row">
+                        <div class="d-flex">
+                            <div class="w-100">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <video controls autoplay="true" id="player"></video>
+                                        <button class="btn btn-primary mt-5" id="capture">CLCIK PHOTO</button>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <canvas id="canvas" class="w-100 h-100"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 				</div>
 			</main>
-
-			<!--<footer class="footer">
-				<div class="container-fluid">
-					<div class="row text-muted">
-						<div class="col-6 text-left">
-							<p class="mb-0">
-								<a href="index.html" class="text-muted"><strong>Suroso Organic Dashboard</strong></a> &copy;
-							</p>
-						</div>
-						<div class="col-6 text-right">
-							Designed and Developed by <strong>Daksh Sethi</strong>
-						</div>
-					</div>
-				</div>
-			</footer>-->
 		</div>
 	</div>
 
-	<script src="js/app.js"></script>
+    <script src="../static/js/app.js"></script>
+    <script>
+        var video = document.querySelector("#player");
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (err0r) {
+                console.log("Something went wrong!");
+            });
+        }
+
+        const player = document.getElementById('player');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const captureButton = document.getElementById('capture');
+
+        const constraints = {
+            video: true,
+        };
+        
+        captureButton.addEventListener('click', () => {
+            // Draw the video frame to the canvas.
+            context.drawImage(player, 0, 0, canvas.width, canvas.height);
+        });
+
+        // Attach the video stream to the video element and autoplay.
+        navigator.mediaDevices.getUserMedia(constraints)
+        .then((stream) => {
+            player.srcObject = stream;
+        });
+    </script>
 
 </body>
 
