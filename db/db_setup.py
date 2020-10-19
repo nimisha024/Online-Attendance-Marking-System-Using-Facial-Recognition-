@@ -15,10 +15,10 @@ def create_tables():
     connection = get_connection()
     cursor = connection.cursor()
 
-    create_table = 'CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)'
+    create_table = 'CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, username NOT NULL TEXT UNIQUE, password TEXT NOT NULL, is_student BOOLEAN DEFAULT FALSE)'
     cursor.execute(create_table)
 
-    create_table = 'CREATE TABLE IF NOT EXISTS student ( id INTEGER PRIMARY KEY, student_id TEXT NOT NULL UNIQUE, student_name TEXT NOT NULL, FOREIGN KEY (id) REFERENCES user (id))'
+    create_table = 'CREATE TABLE IF NOT EXISTS student (id INTEGER PRIMARY KEY, student_id TEXT NOT NULL UNIQUE, student_name TEXT NOT NULL, FOREIGN KEY (id) REFERENCES user (id))'
     cursor.execute(create_table)
 
     create_table = 'CREATE TABLE IF NOT EXISTS faculty (id INTEGER PRIMARY KEY, faculty_id TEXT NOT NULL UNIQUE, faculty_name TEXT NOT NULL, FOREIGN KEY (id) REFERENCES user (id))'
@@ -40,26 +40,26 @@ def insert_users():
     connection = get_connection()
     cursor = connection.cursor()
 
-    insert_query = "INSERT INTO user (username, password) VALUES (?, ?)"
+    insert_query = "INSERT INTO user (username, password, is_student) VALUES (?, ?, ?)"
+
     users = [
-        ('nimisha', 'asdf'),
-        ('tanay', 'asdf'),
-        ('daksh', 'xyz'),
-        ('sumit', 'xyz'),
-        ('kavya', 'xyz'),
-        ('anisha', 'xyz'),
-        ('himanshu', 'xyz'),
-        ('ankita', 'xyz'),
-        ('stuti', 'xyz'),
-        ('parth', 'xyz'),
-        ('amit', 'xyz'),
-        ('kunal', 'xyz'),
-        ('pooja', 'xyz'),
-        ('manas', 'xyz'),
-        ('priya', 'xyz')
+        ('nimisha', 'asdf', True),
+        ('tanay', 'asdf', True),
+        ('daksh', 'xyz', True),
+        ('sumit', 'xyz', True),
+        ('kavya', 'xyz', True),
+        ('anisha', 'xyz', True),
+        ('himanshu', 'xyz', True),
+        ('ankita', 'xyz', True),
+        ('stuti', 'xyz', True),
+        ('parth', 'xyz', True),
+        ('amit', 'xyz', False),
+        ('kunal', 'xyz', False),
+        ('pooja', 'xyz', False),
+        ('manas', 'xyz', False),
+        ('priya', 'xyz', False)
 
     ]
-
     cursor.executemany(insert_query, users)
 
     connection.close()
