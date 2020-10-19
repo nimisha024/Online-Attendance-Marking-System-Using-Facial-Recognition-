@@ -1,42 +1,36 @@
-
 $(document).ready(function () {
-
     $("#btnSubmit").click(function (event) {
 
         //stop submit the form, we will post it manually.
         event.preventDefault();
 
         //get data
-        var formData = {
-            "username"              : $('input[name=student_id]').val(),
-            "password"             : $('input[name=password]').val(),
+        const formData = {
+            "username": $('input[name=student_id]').val(),
+            "password": $('input[name=password]').val(),
         };
 
-       // disabled the submit button
+        // disabled the submit button
         $("#btnSubmit").prop("disabled", true);
 
         $.ajax({
+            url: "/auth",
             type: "POST",
-            url: "http://127.0.0.1:5000/auth",
-            data: formData,
+            data: JSON.stringify(formData),
+            dataType: "json",
             contentType: "application/json",
-            crossDomain : true,
             success: function (data) {
-
-                $("#output").text(data);
+                $("#output").text("Login Successful");
+                window.location.href = "/home";
+                Cookies.set('access_token', data.access_token, { expires: 7, secure: true});
                 console.log("SUCCESS : ", data);
                 $("#btnSubmit").prop("disabled", false);
-
             },
             error: function (e) {
-
-                $("#output").text(e.responseText);
+                $("#output").text(e.responseJSON["description"]);
                 console.log("ERROR : ", e);
                 $("#btnSubmit").prop("disabled", false);
-
             }
         });
-
     });
-
 });

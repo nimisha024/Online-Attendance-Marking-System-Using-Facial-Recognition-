@@ -1,4 +1,4 @@
-from user import User
+from api.user import User
 
 
 def authenticate(username, password):

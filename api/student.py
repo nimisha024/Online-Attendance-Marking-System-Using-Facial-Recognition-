@@ -1,35 +1,22 @@
-from flask_jwt import jwt_required
+from flask_jwt import jwt_required, current_identity
 from flask_restful import Resource, reqparse
 
-from db.db_util import get_connection
+from db.db_util import get_connection, get_student
 
 
 class Student(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('regNO',
-                        required=True,
-                        help='This field cannot be left blank'
-                        )
+    parser.add_argument('user_id', required=True, help='ID field cannot be left blank')
 
     @jwt_required()
-    def get(self, name):
-        student = self.find_by_name(name)
-        if student:
-            return student
-        return {'message': 'Student not found'}
-
-    @staticmethod
-    def find_by_name(name):
-        connection = get_connection()
-        cursor = connection.cursor()
-
-        query = 'SELECT * FROM student WHERE student_name=?'
-        result = cursor.execute(query, (name,))
-        row = result.fetchone()
-        connection.close()
-
-        if row:
-            return {'student': {'name': row[0], 'regNO': row[1], 'course': row[2]}}
+    def get(self, user_id):
+        if current_identity.id == user_id or not current_identity.is_student:
+            student = get_student(user_id)
+            if student:
+                return student
+            return {'message': 'Student not found'}, 404
+        else:
+            return {'message': 'Current user is not authorized to view this student\'s details'}, 404
 
     def post(self, name):
         if self.find_by_name(name):
@@ -107,7 +94,7 @@ class StudentList(Resource):
 
         query = 'SELECT * FROM student'
         result = cursor.execute(query)
-        
+
         students = []
         for row in result:
             students.append({'name': row[0], 'regNO': row[1], 'course': row[2]})

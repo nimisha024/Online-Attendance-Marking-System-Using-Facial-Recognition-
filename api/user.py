@@ -1,15 +1,17 @@
-import sqlite3
+import json
 
+from flask_jwt import jwt_required, current_identity
 from flask_restful import Resource, reqparse
 
 from db.db_util import get_connection
 
 
 class User:
-    def __init__(self, _id, username, password):
+    def __init__(self, _id, username, password, is_student):
         self.id = _id
         self.username = username
         self.password = password
+        self.is_student = is_student == 1
 
     @classmethod
     def find_by_username(cls, username):
@@ -42,6 +44,17 @@ class User:
 
         connection.close()
         return user
+
+
+class UserApi(Resource):
+    @jwt_required()
+    def get(self):
+        user = {
+            'id': current_identity.id,
+            'username': current_identity.username,
+            'is_student': current_identity.is_student,
+        }
+        return json.dumps(user)
 
 
 class UserRegister(Resource):
