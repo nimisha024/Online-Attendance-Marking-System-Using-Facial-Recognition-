@@ -16,7 +16,7 @@ class User:
         connection = get_connection()
         cursor = connection.cursor()
 
-        query = 'SELECT * FROM users WHERE username=?'
+        query = 'SELECT * FROM user WHERE username=?'
         result = cursor.execute(query, (username,))
         row = result.fetchone()
         if row:
@@ -32,7 +32,7 @@ class User:
         connection = get_connection()
         cursor = connection.cursor()
 
-        query = 'SELECT * FROM users WHERE id=?'
+        query = 'SELECT * FROM user WHERE id=?'
         result = cursor.execute(query, (_id,))
         row = result.fetchone()
         if row:
@@ -66,7 +66,7 @@ class UserRegister(Resource):
         connection = get_connection()
         cursor = connection.cursor()
 
-        query = 'INSERT INTO users VALUES (NULL, ?, ?)'
+        query = 'INSERT INTO user VALUES (NULL, ?, ?)'
         cursor.execute(query, (data['username'], data['password']))
 
         connection.commit()

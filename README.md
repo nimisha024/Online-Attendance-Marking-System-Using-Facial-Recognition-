@@ -30,3 +30,18 @@ You can include things like:
 * Facial Recognition
     * Research about facial recognition in python
     * Add facial recognition module
+    
+## RUN INSTRUCTIONS
+* To run app 
+
+    ` python app.py `
+* Execute all command in venv 
+* Database run command
+
+     `python db_setup.py` 
+     
+ * To run server from anywhere 
+ 
+       `python -m http.server`             
+     
+            

@@ -23,7 +23,7 @@ class Student(Resource):
         connection = get_connection()
         cursor = connection.cursor()
 
-        query = 'SELECT * FROM students WHERE name=?'
+        query = 'SELECT * FROM student WHERE student_name=?'
         result = cursor.execute(query, (name,))
         row = result.fetchone()
         connection.close()
@@ -51,7 +51,7 @@ class Student(Resource):
         connection = get_connection()
         cursor = connection.cursor()
 
-        query = 'INSERT INTO students VALUES (?, ?, ?)'
+        query = 'INSERT INTO student VALUES (?, ?, ?)'
         cursor.execute(query, (student['name'], student['regNO'], student['course']))
 
         connection.commit()
@@ -62,7 +62,7 @@ class Student(Resource):
         connection = get_connection()
         cursor = connection.cursor()
 
-        query = 'DELETE FROM students WHERE name=?'
+        query = 'DELETE FROM student WHERE student_name=?'
         cursor.execute(query, (name,))
 
         connection.commit()
@@ -93,7 +93,7 @@ class Student(Resource):
         connection = get_connection()
         cursor = connection.cursor()
 
-        query = 'UPDATE students SET regNO=? WHERE name=?'
+        query = 'UPDATE student SET regNO=? WHERE student_name=?'
         cursor.execute(query, (student['regNO'], student['name']))
 
         connection.commit()
@@ -105,7 +105,7 @@ class StudentList(Resource):
         connection = get_connection()
         cursor = connection.cursor()
 
-        query = 'SELECT * FROM students'
+        query = 'SELECT * FROM student'
         result = cursor.execute(query)
         
         students = []
