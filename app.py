@@ -20,10 +20,6 @@ jwt = JWT(app, authenticate, identity)  # /auth
 students = []
 
 
-# @app.route('/<string:page_name>/')
-# def render_static(page_name):
-#     return render_template(f'{page_name}.html')
-
 @app.route('/login')
 def login():
     return render_template('login.html')
@@ -47,16 +43,9 @@ def favicon():
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
-class StudentList(Resource):
-    @staticmethod
-    def get():
-        return {'students': students}
-
-
 api.add_resource(UserApi, '/api/user/')
 api.add_resource(Student, '/api/student/<int:user_id>')
 api.add_resource(StudentCourses, '/api/student/<int:user_id>/courses')
-api.add_resource(StudentList, '/api/students')
 api.add_resource(UserRegister, '/api/register')
 
 if __name__ == '__main__':
