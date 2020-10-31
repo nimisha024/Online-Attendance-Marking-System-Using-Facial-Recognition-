@@ -10,17 +10,17 @@ class Student(Resource):
 
     @jwt_required()
     def get(self, user_id):
-        if current_identity.id == user_id or not current_identity.is_student:
+        if current_identity.id == user_id or current_identity.is_faculty:
             student = get_student(user_id)
             if student:
                 return student
-            return {'message': 'Student not found'}, 404
+            return {'message': 'Student not found'}, 200
         else:
-            return {'message': 'Current user is not authorized to view this student\'s details'}, 404
+            return {'message': 'Current user is not authorized to view this student\'s details'}, 200
 
     def post(self, name):
         if self.find_by_name(name):
-            return {'message': f"A student with name '{name}' already exists."}, 400
+            return {'message': f"A student with name '{name}' already exists."}, 200
 
         data = Student.parser.parse_args()
 
