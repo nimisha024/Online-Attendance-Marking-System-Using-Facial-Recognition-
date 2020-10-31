@@ -42,3 +42,6 @@ class FacialRecognition:
         if True in result:
             first_match_index = result.index(True)
             return self.known_face_names[first_match_index]
+
+
+fr = FacialRecognition()

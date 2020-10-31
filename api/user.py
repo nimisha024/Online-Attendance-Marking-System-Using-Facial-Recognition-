@@ -12,6 +12,7 @@ class User:
         self.username = username
         self.password = password
         self.is_student = is_student == 1
+        self.is_faculty = not self.is_student
 
     @classmethod
     def find_by_username(cls, username):
@@ -54,7 +55,7 @@ class UserApi(Resource):
             'username': current_identity.username,
             'is_student': current_identity.is_student,
         }
-        return json.dumps(user)
+        return user
 
 
 class UserRegister(Resource):
@@ -71,7 +72,7 @@ class UserRegister(Resource):
                         )
 
     def post(self):
-        data = UserRegister.parser.parse_args()
+        data = self.parser.parse_args()
 
         if User.find_by_username(data['username']):
             return {'message': 'A user with same username exists'}, 400
