@@ -4,10 +4,10 @@ import werkzeug
 from flask_jwt import jwt_required, current_identity
 from flask_restful import Resource, reqparse
 
-from db.db_util import get_student, get_student_courses, get_course, mark_attendance_present, does_teach_course, \
-    get_attendance, \
-    has_enrolled_course, get_faculty, has_ongoing_class, end_class, start_class, get_class_id, get_present_students, \
-    mark_attendance_absent, get_all_students
+from db.db_util import get_student, mark_attendance_present, does_teach_course, \
+    get_course_attendance, \
+    has_enrolled_course, has_ongoing_class, end_class, start_class, get_class_id, get_present_students, \
+    mark_attendance_absent, get_all_students, get_student_attendance
 from facial_recog.config import TO_BE_PROCESSED_IMG_DIR
 from facial_recog.facial_recognition import fr
 
@@ -19,33 +19,26 @@ class Attendance(Resource):
         parser.add_argument('user_id', type=int, required=False)
         args = parser.parse_args()
 
-        user_id = args['user_id']
-        if user_id:
-            if user_id == current_identity.id:
-                if current_identity.is_student:
-                    student = get_student(user_id)
-                    student_courses = get_student_courses(student["student_id"])
-                    if student_courses:
-                        courses_list = []
-                        for course in student_courses:
-                            courses_list.append(get_course(course))
-                        return courses_list
-                    return {'message': 'Student\'s courses not found'}, 200
+        if current_identity.is_student:
+            user_id = args['user_id']
+            if user_id:
+                if user_id == current_identity.id:
+                    return get_student_attendance(course_id, user_id), 200
                 else:
-                    faculty = get_faculty(user_id)
+                    return {'message': 'You are not authorized to view this student\'s attendance details'}, 200
             else:
-                return {'message': 'You are not authorized to view this student\'s courses'}, 200
+                return {'message': 'user_id must be passed to view student\'s attendance details'}, 404
         else:
-            # If no user_id is given, then the request must come from faculty only.
             # Aggregate view of each student's percentage wise attendance will be returned
             user_id = current_identity.id
-            if current_identity.is_faculty and does_teach_course(course_id, user_id):
-                attendance = get_attendance(course_id)
+            if does_teach_course(course_id, user_id):
+                attendance = get_course_attendance(course_id)
                 for row in attendance:
                     row.update(get_student(row['student_id']))
-                return attendance
+                    row["attendance_percent"] = round(row["present_count"] * 100 / row["total_count"], 4)
+                return attendance, 200
             else:
-                return {'message': 'You are not authorized to view this course\'s attendance details'}, 200
+                return {'message': 'You do not teach this course, hence cannot view it\'s attendance details'}, 200
 
     @jwt_required()
     def post(self, course_id):
@@ -74,12 +67,12 @@ class Attendance(Resource):
                     return {'message': 'You are not enrolled in this course'}, 200
             else:
                 if has_ongoing_class(course_id):
-                    end_class(course_id)
                     class_id = get_class_id(course_id)
                     all_students = get_all_students(course_id)
                     present_students = get_present_students(class_id)
                     absent_students = [student for student in all_students if student not in present_students]
                     mark_attendance_absent(class_id, absent_students)
+                    end_class(course_id)
                     return {'message': 'Class ended successfully'}, 200
                 else:
                     start_class(course_id)

@@ -23,7 +23,6 @@ $(document).ready(function () {
                 $("#output").text("Login Successful");
                 window.location.href = "/home";
                 Cookies.set('access_token', data.access_token, { expires: 7, secure: true});
-                console.log("SUCCESS : ", data);
                 $("#btnSubmit").prop("disabled", false);
             },
             error: function (e) {
