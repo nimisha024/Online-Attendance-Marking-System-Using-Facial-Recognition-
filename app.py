@@ -22,8 +22,6 @@ api = Api(app)
 
 jwt = JWT(app, authenticate, identity)  # /auth
 
-students = []
-
 
 @app.route('/login')
 def login():

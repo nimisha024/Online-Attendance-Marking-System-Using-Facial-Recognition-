@@ -1,9 +1,10 @@
 import os
 import pickle
-import numpy
-import face_recognition
 
-from facial_recog.config import KNOWN_IMG_DIR, TO_BE_PROCESSED_IMG_DIR, ENCODINGS_FILE
+import face_recognition
+import numpy
+
+from facial_recog.config import KNOWN_IMG_DIR, ENCODINGS_FILE
 
 
 def train():
@@ -11,8 +12,9 @@ def train():
 
     all_face_encodings = {}
     for filename in img_filenames:
+        filename_without_extension = filename.split('.')[0]
         face = face_recognition.load_image_file(os.path.join(KNOWN_IMG_DIR, filename))
-        all_face_encodings[filename] = face_recognition.face_encodings(face)[0]
+        all_face_encodings[filename_without_extension] = face_recognition.face_encodings(face)[0]
 
     with open(ENCODINGS_FILE, 'wb') as enc_file:
         pickle.dump(all_face_encodings, enc_file)
@@ -34,8 +36,8 @@ class FacialRecognition:
         self.known_face_names = list(all_face_encodings.keys())
         self.known_face_encodings = numpy.array(list(all_face_encodings.values()))
 
-    def recognize_face(self, image_name):
-        unknown_image = face_recognition.load_image_file(os.path.join(TO_BE_PROCESSED_IMG_DIR, image_name))
+    def recognize_face(self, image_path):
+        unknown_image = face_recognition.load_image_file(image_path)
         unknown_face = face_recognition.face_encodings(unknown_image)
         result = face_recognition.compare_faces(self.known_face_encodings, unknown_face)
 

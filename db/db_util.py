@@ -210,15 +210,16 @@ def get_student_attendance(course_id, student_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    query = 'SELECT c.start_time, c.end_time, a.is_present FROM class c INNER JOIN attendance a ON c.id = a.class_id ' \
-            'WHERE c.course_id = ? AND a.student_id = ?'
+    query = 'SELECT c.start_time, c.end_time, SUM(a.is_present) FROM class c INNER JOIN attendance a ON c.id = a.class_id ' \
+            'WHERE c.course_id = ? AND a.student_id = ? ' \
+            'GROUP BY c.id, a.student_id'
     result = cursor.execute(query, (course_id, student_id))
     rows = result.fetchall()
     connection.close()
 
     attendance = []
     for row in rows:
-        attendance.append({'start_time': row[0], 'end_time': row[1], 'is_present': row[2] == 1})
+        attendance.append({'start_time': row[0], 'end_time': row[1], 'is_present': row[2] != 0})
 
     return attendance
 
@@ -227,7 +228,8 @@ def get_present_students(class_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    query = 'SELECT student_id FROM attendance WHERE class_id=? AND is_present = TRUE'
+    query = 'SELECT student_id FROM attendance WHERE class_id=? AND is_present = TRUE ' \
+            'GROUP BY student_id'
     result = cursor.execute(query, (class_id,))
     rows = result.fetchall()
     connection.close()
@@ -243,7 +245,7 @@ def mark_attendance_present(course_id, student_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    query = 'INSERT OR IGNORE INTO attendance(class_id, student_id, is_present) values (?, ?, ?)'
+    query = 'INSERT INTO attendance(class_id, student_id, is_present) values (?, ?, ?)'
     cursor.execute(query, (course_id, student_id, True))
     connection.close()
 

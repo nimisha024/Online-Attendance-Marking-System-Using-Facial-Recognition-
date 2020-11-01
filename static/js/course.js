@@ -2,14 +2,12 @@ let user;
 let course;
 
 $(document).ready(function () {
-    $.ajax({
+    $('#webcam-container').hide();
+    $.get({
         url: "/api/user",
-        type: "GET",
         headers: {
             Authorization: 'JWT ' + Cookies.get('access_token')
         },
-        dataType: "json",
-        contentType: "application/json",
         success: function (data) {
             user = data;
             user = getUserData(user);
@@ -22,15 +20,13 @@ $(document).ready(function () {
     });
 })
 
-
 function getAttendanceData() {
-    $.ajax({
+    $.get({
         url: "/api/attendance/" + course_id,
-        type: "GET",
         headers: {
             Authorization: 'JWT ' + Cookies.get('access_token')
         },
-        data: "user_id=" + user.id,
+        data: {user_id: user.id},
         success: function (data) {
             showAttendanceDetails(data);
         },
@@ -41,25 +37,14 @@ function getAttendanceData() {
 }
 
 function getCourseData() {
-    $.ajax({
+    $.get({
         url: "/api/course/" + course_id,
-        type: "GET",
         headers: {
             Authorization: 'JWT ' + Cookies.get('access_token')
         },
-        dataType: "json",
-        contentType: "application/json",
         success: function (data) {
             course = data;
-            let courseBtn = $("#course-btn");
-            if (user.is_student) {
-                courseBtn.attr("disabled", !course.is_ongoing)
-                courseBtn.html(course.is_ongoing ? "Attend" : "No" + " ongoing class");
-                courseBtn.click(attendClass);
-            } else {
-                courseBtn.click(changeCourseState);
-                updateCourseButton()
-            }
+            updateCourseButton()
         },
         error: function (e) {
             console.log("ERROR : ", e);
@@ -68,10 +53,9 @@ function getCourseData() {
 }
 
 function changeCourseState() {
-    $.ajax({
+    $.post({
         url: "/api/attendance/" + course_id,
-        type: "POST",
-        data: "user_id=" + user.id,
+        data: {user_id: user.id},
         headers: {
             Authorization: 'JWT ' + Cookies.get('access_token')
         },
@@ -88,12 +72,25 @@ function changeCourseState() {
 
 function updateCourseButton() {
     let courseBtn = $("#course-btn");
-    if (course.is_ongoing) {
-        courseBtn.html("Stop ongoing class");
-        courseBtn.addClass("btn-outline-danger")
+    if (user.is_student) {
+        courseBtn.attr("disabled", !course.is_ongoing)
+        courseBtn.click(attendClass)
+        if (course.is_ongoing) {
+            courseBtn.html("Attend ongoing class");
+            courseBtn.addClass("btn-outline-success")
+        } else {
+            courseBtn.html("No ongoing class");
+            courseBtn.addClass("btn-outline-danger")
+        }
     } else {
-        courseBtn.html("Start a new class");
-        courseBtn.addClass("btn-outline-success")
+        courseBtn.click(changeCourseState);
+        if (course.is_ongoing) {
+            courseBtn.html("Stop ongoing class");
+            courseBtn.addClass("btn-outline-danger")
+        } else {
+            courseBtn.html("Start a new class");
+            courseBtn.addClass("btn-outline-success")
+        }
     }
 }
 
@@ -130,8 +127,8 @@ function showAttendanceDetails(data) {
                 trow.addClass("table-danger")
             }
             $("<th>", {"scope": "row"}).appendTo(trow).html(index + 1);
-            $("<td>").appendTo(trow).html(value.start_time);
-            $("<td>").appendTo(trow).html(value.end_time);
+            $("<td>").appendTo(trow).html(value.start_time);                // TODO better datetime formatting
+            $("<td>").appendTo(trow).html(value.end_time || "Ongoing");     // TODO better datetime formatting
             $("<td>").appendTo(trow).html(value.is_present ? "Present" : "Absent");
         });
     } else {
@@ -171,8 +168,6 @@ function showAttendanceDetails(data) {
     }
 }
 
-
 function attendClass() {
-    // TODO show capture window
-    console.log("attend class")
+    $('#webcam-container').toggle();
 }

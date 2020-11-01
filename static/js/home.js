@@ -1,14 +1,11 @@
 let user;
 
 $(document).ready(function () {
-    $.ajax({
+    $.get({
         url: "/api/user",
-        type: "GET",
         headers: {
             Authorization: 'JWT ' + Cookies.get('access_token')
         },
-        dataType: "json",
-        contentType: "application/json",
         success: function (data) {
             user = data;
             user = getUserData(user);
@@ -22,14 +19,11 @@ $(document).ready(function () {
 
 function getCourseData(user) {
     if (user.is_student) {
-        $.ajax({
+        $.get({
             url: "/api/student/" + user.id + "/courses",
-            type: "GET",
             headers: {
                 Authorization: 'JWT ' + Cookies.get('access_token')
             },
-            dataType: "json",
-            contentType: "application/json",
             success: function (data) {
                 addCourses(data)
             },
@@ -38,14 +32,11 @@ function getCourseData(user) {
             }
         });
     } else {
-        $.ajax({
+        $.get({
             url: "/api/faculty/" + user.id + "/courses",
-            type: "GET",
             headers: {
                 Authorization: 'JWT ' + Cookies.get('access_token')
             },
-            dataType: "json",
-            contentType: "application/json",
             success: function (data) {
                 addCourses(data)
             },
