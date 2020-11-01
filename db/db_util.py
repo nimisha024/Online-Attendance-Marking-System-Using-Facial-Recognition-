@@ -156,7 +156,7 @@ def end_class(course_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    query = 'UPDATE class set end_time = ? WHERE course_id = ? AND start_time IS NULL'
+    query = 'UPDATE class SET end_time = ? WHERE course_id = ? AND end_time IS NULL'
     cursor.execute(query, (datetime.now(), course_id))
     connection.close()
 
@@ -177,7 +177,7 @@ def get_class_id(course_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    query = 'SELECT course_id FROM class WHERE course_id=? and end_time IS NULL'
+    query = 'SELECT id FROM class WHERE course_id=? and end_time IS NULL'
     result = cursor.execute(query, (course_id,))
     class_id = result.fetchone()[0]
     connection.close()
@@ -185,30 +185,40 @@ def get_class_id(course_id):
     return class_id
 
 
-def get_attendance(course_id):
-    # TODO student - present - total
-    student_ids = get_all_students(course_id)
-
-    student_attendance = {}
-    for student_id in student_ids:
-        student_attendance[student_id] = get_attendance(course_id, student_id)
-
-    return student_attendance
-
-
-def get_attendance(course_id, student_id):
-    # TODO date - present
+def get_course_attendance(course_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    query = 'SELECT  strftime("%Y-%m-%dT%H:00:00.000", datetime) as hour FROM attendance WHERE student_id=? GROUP BY hour'
+    student_ids = get_all_students(course_id)
+
+    query = 'SELECT a.student_id, SUM(a.is_present), COUNT(a.is_present) FROM class c INNER JOIN attendance a ON c.id = a.class_id ' \
+            f'WHERE a.student_id IN ({",".join("?" * len(student_ids))}) AND c.course_id = {course_id} ' \
+            'GROUP BY a.student_id'
+
+    result = cursor.execute(query, student_ids)
+    rows = result.fetchall()
+    connection.close()
+
+    attendance = []
+    for row in rows:
+        attendance.append({'student_id': row[0], 'present_count': row[1], 'total_count': row[2]})
+
+    return attendance
+
+
+def get_student_attendance(course_id, student_id):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    query = 'SELECT c.start_time, c.end_time, a.is_present FROM class c INNER JOIN attendance a ON c.id = a.class_id ' \
+            'WHERE c.course_id = ? AND a.student_id = ?'
     result = cursor.execute(query, (course_id, student_id))
     rows = result.fetchall()
     connection.close()
 
     attendance = []
     for row in rows:
-        attendance.append(row)
+        attendance.append({'start_time': row[0], 'end_time': row[1], 'is_present': row[2] == 1})
 
     return attendance
 

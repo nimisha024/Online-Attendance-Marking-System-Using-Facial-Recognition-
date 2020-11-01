@@ -79,22 +79,23 @@
     </nav>-->
 
     <div class="main">
-        <nav class="navbar navbar-expand navbar-light navbar-bg">
-            <a class="sidebar-toggle d-flex">
-                <i class="hamburger align-self-center"></i>
-            </a>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-            <form class="d-none d-sm-inline-block">
-                <div class="input-group input-group-navbar">
-                    <input type="text" class="form-control" placeholder="Search…" aria-label="Search">
-                    <button class="btn" type="button">
-                        <i class="align-middle" data-feather="search"></i>
-                    </button>
-                </div>
-            </form>
+            <a class="navbar-brand h4" href="#">Attendance Module</a>
 
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse justify-content-center">
                 <ul class="navbar-nav navbar-align">
+                    <li class="nav-item active">
+                        <a class="nav-link h4" href="/home">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link h4" href="/home">Courses</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav navbar-align justify-content-end">
+                    <li class="nav-item">
+                        <button class="btn mx-5" type="button" id="course-btn"></button>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-toggle="dropdown">
                             <i class="align-middle" data-feather="settings"></i>
@@ -102,7 +103,7 @@
 
                         <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
                             <img src="../static/img/diary.png" class="avatar img-fluid rounded mr-1"
-                                 alt="Charles Hall"/> <span class="text-dark" id="user-name">Student Name</span>
+                                 alt="Charles Hall"/> <span class="text-dark h4" id="user-name">Student Name</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1"
@@ -114,18 +115,26 @@
                             <a class="dropdown-item" href="#"><i class="align-middle mr-1"
                                                                  data-feather="help-circle"></i> Help Center</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Log out</a>
+                            <a class="dropdown-item" href="/login">Log out</a>
                         </div>
                     </li>
                 </ul>
             </div>
         </nav>
-        <div>
-            <button class="btn btn-primary" type="button" id="course-btn"></button>
-            <div>
-                Attendance to be shown here
+        <main class="content">
+            <div class="container-fluid p-5">
+                <div class="row">
+                    <div class="col-12 col-xl-6">
+                        <div class="card" id="attendance-container">
+                            <div class="card-header" id="attendance-info">
+                            </div>
+                            <table class="table" id="attendance-table">
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 </div>
 

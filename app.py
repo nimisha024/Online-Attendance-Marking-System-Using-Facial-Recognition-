@@ -57,8 +57,5 @@ api.add_resource(FacultyCourses, '/api/faculty/<int:user_id>/courses')
 api.add_resource(CourseApi, '/api/course/<int:course_id>')
 api.add_resource(Attendance, '/api/attendance/<int:course_id>')
 
-# TODO show attendance client ui html+js
-# TODO take attendance client ui html+js
-
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

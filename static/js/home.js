@@ -15,15 +15,15 @@ $(document).ready(function () {
             getCourseData(user);
         },
         error: function (e) {
-            console.log("ERROR : ", e.responseJSON["description"]);
+            console.log("ERROR : ", e);
         }
     });
 })
 
 function getCourseData(user) {
-    if (user["is_student"] === true) {
+    if (user.is_student) {
         $.ajax({
-            url: "/api/student/" + user["id"] + "/courses",
+            url: "/api/student/" + user.id + "/courses",
             type: "GET",
             headers: {
                 Authorization: 'JWT ' + Cookies.get('access_token')
@@ -39,7 +39,7 @@ function getCourseData(user) {
         });
     } else {
         $.ajax({
-            url: "/api/faculty/" + user["id"] + "/courses",
+            url: "/api/faculty/" + user.id + "/courses",
             type: "GET",
             headers: {
                 Authorization: 'JWT ' + Cookies.get('access_token')
@@ -61,11 +61,11 @@ function addCourses(courses) {
     let dummyCourse = $('#dummy-course');
     for (let course of courses) {
         let clone = dummyCourse.clone();
-        clone.attr("id", course["course_code"]);
+        clone.attr("id", course.course_code);
         courseList.append(clone);
 
-        $("#" + course["course_code"] + " #course-name").text(course["course_name"]);
-        $("#" + course["course_code"] + " #view-course").attr("href", "/course/" + course["course_code"]);
+        $("#" + course.course_code + " #course-name").text(course.course_name);
+        $("#" + course.course_code + " #view-course").attr("href", "/course/" + course.course_code);
     }
     dummyCourse.remove();
 }
