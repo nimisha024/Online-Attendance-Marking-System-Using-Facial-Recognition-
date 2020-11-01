@@ -71,3 +71,18 @@ def get_student_courses(student_id):
         student_courses.append(row[0])
 
     return student_courses
+
+def get_faculty_courses(faculty_id):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    query = 'SELECT course_id FROM course WHERE faculty_id=?'
+    result = cursor.execute(query, (faculty_id,))
+    rows = result.fetchall()
+    connection.close()
+
+    faculty_courses = []
+    for row in rows:
+        faculty_courses.append(row[0])
+
+    return faculty_courses

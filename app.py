@@ -5,6 +5,8 @@ from flask import Flask, render_template, send_from_directory
 from flask_jwt import JWT, jwt_required
 from flask_restful import Resource, Api
 
+from api.faculty import Faculty
+from api.faculty_course import FacultyCourses
 from api.student import Student
 from api.student_courses import StudentCourses
 from api.user import UserRegister, UserApi
@@ -55,7 +57,9 @@ class StudentList(Resource):
 
 api.add_resource(UserApi, '/api/user/')
 api.add_resource(Student, '/api/student/<int:user_id>')
+api.add_resource(Faculty, '/api/faculty/<int:user_id>')
 api.add_resource(StudentCourses, '/api/student/<int:user_id>/courses')
+api.add_resource(FacultyCourses, '/api/faculty/<int:user_id>/courses')
 api.add_resource(StudentList, '/api/students')
 api.add_resource(UserRegister, '/api/register')
 
