@@ -1,13 +1,10 @@
 function getUserData(user) {
     if (user.is_student) {
-        $.ajax({
+        $.get({
             url: "/api/student/" + user.id,
-            type: "GET",
             headers: {
                 Authorization: 'JWT ' + Cookies.get('access_token')
             },
-            dataType: "json",
-            contentType: "application/json",
             success: function (data) {
                 $.extend(user, data);
                 $("#user-name").text(user.student_name + " " + user.student_id)
@@ -17,14 +14,11 @@ function getUserData(user) {
             }
         });
     } else {
-        $.ajax({
+        $.get({
             url: "/api/faculty/" + user.id,
-            type: "GET",
             headers: {
                 Authorization: 'JWT ' + Cookies.get('access_token')
             },
-            dataType: "json",
-            contentType: "application/json",
             success: function (data) {
                 $.extend(user, data);
                 $("#user-name").text(user.faculty_name + " " + user.faculty_id)

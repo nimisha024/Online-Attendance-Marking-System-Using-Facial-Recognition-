@@ -132,6 +132,23 @@
                             </table>
                         </div>
                     </div>
+                    <div class="col-12 col-xl-6">
+                        <div class="card" id="webcam-container">
+                            <div id="webcam" style="border: 1px black; box-shadow: 2px 2px 4px #000000;">
+
+                            </div>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type=button class="btn btn-secondary btn-lg" onClick="configure()">Configure
+                                </button>
+                                <button type=button class="btn btn-secondary btn-lg" onClick="takeSnapshot()">Take
+                                    Snapshot
+                                </button>
+                                <button type=button class="btn btn-secondary btn-lg" id="upload-button" onClick="uploadSnap()" disabled>Upload Snapshot
+                                </button>
+                            </div>
+                            <div id="result"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -144,8 +161,10 @@
 <script src="../static/js/app.js" type="text/javascript"></script>
 <script src="../static/js/jquery-3.5.1.js" type="text/javascript"></script>
 <script src="../static/js/js.cookie.js" type="text/javascript"></script>
+<script src="../static/webcam/webcam.js" type="text/javascript"></script>
 <script src="../static/js/util.js" type="text/javascript"></script>
 <script src="../static/js/course.js" type="text/javascript"></script>
+<script src="../static/js/attendance.js" type="text/javascript"></script>
 
 </body>
 

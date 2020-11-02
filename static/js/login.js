@@ -13,9 +13,8 @@ $(document).ready(function () {
         // disabled the submit button
         $("#btnSubmit").prop("disabled", true);
 
-        $.ajax({
+        $.post({
             url: "/auth",
-            type: "POST",
             data: JSON.stringify(formData),
             dataType: "json",
             contentType: "application/json",

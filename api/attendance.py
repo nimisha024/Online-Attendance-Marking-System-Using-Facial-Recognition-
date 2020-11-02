@@ -1,6 +1,6 @@
+import base64
 import os
 
-import werkzeug
 from flask_jwt import jwt_required, current_identity
 from flask_restful import Resource, reqparse
 
@@ -44,23 +44,38 @@ class Attendance(Resource):
     def post(self, course_id):
         parser = reqparse.RequestParser()
         parser.add_argument('user_id', type=int, required=True)
-        parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files', required=False)
+        parser.add_argument('image', required=False)
         args = parser.parse_args()
 
         user_id = args['user_id']
-        image_file = args['file']
+        image = args['image']
 
         if user_id == current_identity.id:
             if current_identity.is_student:
                 if has_enrolled_course(course_id, user_id):
                     if has_ongoing_class(course_id):
-                        image_file.save(os.path.join(TO_BE_PROCESSED_IMG_DIR, user_id))
-                        match = fr.recognize_face(user_id)
-                        if match == user_id:
-                            mark_attendance_present(course_id, user_id)
-                            return {'message': 'Your attendance was marked successfully'}, 200
-                        else:
-                            return {'message': 'You were not found in the image'}, 200
+                        starter = image.find(',')
+                        image_data = image[starter + 1:]
+                        image_data = bytes(image_data, encoding="ascii")
+                        image_extension = image[len('data:image/'):image.find(';')]
+                        image_name = f'{user_id}.{image_extension}'
+                        image_path = os.path.join(TO_BE_PROCESSED_IMG_DIR, image_name)
+                        try:
+                            with open(image_path, 'wb') as image_file:
+                                image_file.write(base64.decodebytes(image_data))
+
+                            match = fr.recognize_face(image_path)
+                            if int(match) == user_id:
+                                mark_attendance_present(course_id, user_id)
+                                return {'message': 'Your attendance was marked successfully'}, 200
+                            else:
+                                return {'message': 'You were not found in the image'}, 200
+                        except Exception as e:
+                            print(e)
+                            return {"message": "Processing error"}, 500
+                        finally:
+                            if os.path.exists(image_path):
+                                os.remove(image_path)
                     else:
                         return {'message': 'Course has no active class'}, 200
                 else:

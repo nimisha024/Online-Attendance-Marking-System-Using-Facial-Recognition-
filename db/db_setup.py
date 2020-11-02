@@ -36,7 +36,7 @@ def create_tables():
     create_table = 'CREATE TABLE IF NOT EXISTS class (id INTEGER PRIMARY KEY AUTOINCREMENT, course_id INTEGER, start_time TIMESTAMP NOT NULL, end_time TIMESTAMP, FOREIGN KEY (course_id) REFERENCES course (id))'
     cursor.execute(create_table)
 
-    create_table = 'CREATE TABLE IF NOT EXISTS attendance (class_id INTEGER, student_id INTEGER, is_present BOOLEAN DEFAULT TRUE, PRIMARY KEY (student_id, class_id), FOREIGN KEY (class_id) REFERENCES class (id), FOREIGN KEY (student_id) REFERENCES student (id))'
+    create_table = 'CREATE TABLE IF NOT EXISTS attendance (id INTEGER PRIMARY KEY AUTOINCREMENT, class_id INTEGER, student_id INTEGER, is_present BOOLEAN DEFAULT TRUE, FOREIGN KEY (class_id) REFERENCES class (id), FOREIGN KEY (student_id) REFERENCES student (id))'
     cursor.execute(create_table)
 
     connection.close()
