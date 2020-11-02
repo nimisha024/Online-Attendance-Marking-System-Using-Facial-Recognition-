@@ -153,7 +153,7 @@ def insert_classes():
 
     insert_query = "INSERT INTO class (course_id, start_time, end_time) VALUES (?, ?, ?)"
     classes = [
-        (1, datetime.now() - timedelta(days=1), datetime.now())
+        (1, datetime.now() - timedelta(days=1), datetime.now()),
     ]
 
     cursor.executemany(insert_query, classes)
