@@ -10,8 +10,8 @@ def setup():
     insert_faculties()
     insert_courses()
     insert_student_courses()
-    insert_classes()
-    insert_attendance()
+    # insert_classes()
+    # insert_attendance()
 
 
 def create_tables():
@@ -76,16 +76,16 @@ def insert_students():
 
     insert_query = "INSERT INTO student (id, student_id, student_name) VALUES (?, ?, ?)"
     students = [
-        (1, '19BCE1860', 'nimisha'),
-        (2, '19BCE1563', 'tanay'),
-        (3, '19BCE1320', 'daksh'),
-        (4, '19BCE1600', 'sumit'),
-        (5, '19BCE1426', 'kavya'),
-        (6, '19BCE1123', 'anisha'),
-        (7, '19BCE1024', 'himanshu'),
-        (8, '19BCE1480', 'ankita'),
-        (9, '19BCE1725', 'stuti'),
-        (10, '19BCE1670', 'parth')
+        (1, '19BCE1860', 'Nimisha Swain'),
+        (2, '19BCE1563', 'Tanay Vaishnav'),
+        (3, '19BCE1320', 'Daksh Sethi'),
+        (4, '19BCE1600', 'Sumit Swain'),
+        (5, '19BCE1426', 'Kavya Kapoor'),
+        (6, '19BCE1123', 'Anisha Kaushik'),
+        (7, '19BCE1024', 'Himanshu Barik'),
+        (8, '19BCE1480', 'Ankita Bagaliker'),
+        (9, '19BCE1725', 'Stuti Singh'),
+        (10, '19BCE1670', 'Parth Singh')
 
     ]
 
@@ -100,11 +100,11 @@ def insert_faculties():
 
     insert_query = "INSERT INTO faculty (id, faculty_id, faculty_name) VALUES (?, ?, ?)"
     faculties = [
-        (11, '11FAC1078', 'amit'),
-        (12, '12FAC1346', 'kunal'),
-        (13, '12FAC1005', 'pooja'),
-        (14, '16FAC1089', 'manas'),
-        (15, '18FAC1234', 'priya')
+        (11, '11FAC1078', 'Amit Tyagi'),
+        (12, '12FAC1346', 'Kunal Kapoor'),
+        (13, '12FAC1005', 'Pooja Johar'),
+        (14, '16FAC1089', 'Manas Murli'),
+        (15, '18FAC1234', 'Priya Bhatt')
 
     ]
 
@@ -119,11 +119,15 @@ def insert_courses():
 
     insert_query = "INSERT INTO course (course_code, course_name, faculty_id) VALUES (?, ?, ?)"
     courses = [
-        ('CSE2003', 'Data Structure And Algorithm', 12),
+        ('CSE2002', 'Data Structure And Algorithm', 12),
+        ('CSE2004', 'Network And Communication', 12),
+        ('CHE2003', 'Engineering Chemistry', 15),
         ('CSE3001', 'Software Engineering', 15),
-        ('CSE3002', 'Internet And Web Programming', 11),
-        ('PHY1002', 'Engineering Physics', 14),
-        ('STS1102', 'Soft Skills', 13)
+        ('CSE3002', 'Internet And Web Programming', 12),
+        ('PHY1002', 'Engineering Physics', 13),
+        ('STS1106', 'Soft Skills', 15),
+        ('PHY1105', 'Introduction to Innovative Projects', 13),
+        ('CSE5002', 'Introduction to Machine Learning', 13)
     ]
 
     cursor.executemany(insert_query, courses)
@@ -139,7 +143,31 @@ def insert_student_courses():
     student_courses = [
         (1, 1),
         (1, 2),
+        (1, 3),
+        (1, 5),
+        (1, 6),
+        (2, 1),
+        (2, 5),
         (2, 3),
+        (2, 8),
+        (2, 9),
+        (3, 1),
+        (3, 5),
+        (3, 6),
+        (3, 3),
+        (4, 6),
+        (4, 1),
+        (4, 5),
+        (5, 1),
+        (5, 5),
+        (6, 1),
+        (6, 5),
+        (7, 1),
+        (7, 5),
+        (8, 1),
+        (8, 5),
+        (9, 5),
+        (10, 5)
     ]
 
     cursor.executemany(insert_query, student_courses)
