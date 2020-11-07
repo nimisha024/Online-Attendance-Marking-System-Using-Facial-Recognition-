@@ -1,9 +1,10 @@
 let img_data;
 
 function configure() {
+    const width = $("#webcam").width();
     Webcam.set({
-        width: 'auto',
-        height: 'auto',
+        width: width,
+        height: width * 3 / 4,
         image_format: 'jpeg',
         jpeg_quality: 90
     });
@@ -15,7 +16,7 @@ function takeSnapshot() {
     $("#upload-button").attr("disabled", false);
     Webcam.snap(function (data_uri) {
         img_data = data_uri
-        $('#result').html('<img id="image-prev" src="' + data_uri + '"/>')
+        $('#result').html('<img class="webcam-image" src="' + data_uri + '"/>')
     });
 }
 
