@@ -2,6 +2,7 @@ let user;
 
 $(document).ready(function () {
     checkLoggedIn()
+    $("#content").show();
 
     $.get({
         url: "/api/user",

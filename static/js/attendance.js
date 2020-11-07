@@ -2,6 +2,8 @@ let img_data;
 
 function configure() {
     Webcam.set({
+        width: 'auto',
+        height: 'auto',
         image_format: 'jpeg',
         jpeg_quality: 90
     });
