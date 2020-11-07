@@ -30,3 +30,9 @@ function getUserData(user) {
     }
     return user;
 }
+
+function checkLoggedIn() {
+    if (!Cookies.get('access_token')) {
+        window.location.href = "/login";
+    }
+}

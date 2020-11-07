@@ -2,7 +2,11 @@ let user;
 let course;
 
 $(document).ready(function () {
+    checkLoggedIn()
+
     $('#webcam-container').hide();
+    $('#webcam-result').hide();
+
     $.get({
         url: "/api/user",
         headers: {
@@ -15,6 +19,7 @@ $(document).ready(function () {
             getAttendanceData();
         },
         error: function (e) {
+            Cookies.remove('access_token')
             console.log("ERROR : ", e);
         }
     });
@@ -169,5 +174,5 @@ function showAttendanceDetails(data) {
 }
 
 function attendClass() {
-    $('#webcam-container').toggle();
+    $('#webcam-container').show();
 }

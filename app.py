@@ -16,7 +16,7 @@ from db.db_util import get_course_id
 from security import authenticate, identity
 
 app = Flask(__name__)
-app.secret_key = 'nimisha'
+app.secret_key = '3d6f45a5fc12445dbac2f59c3b6c7cb1'
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=30000)
 api = Api(app)
 

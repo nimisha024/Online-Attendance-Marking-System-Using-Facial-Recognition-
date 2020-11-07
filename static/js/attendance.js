@@ -2,12 +2,11 @@ let img_data;
 
 function configure() {
     Webcam.set({
-        width: 320,
-        height: 240,
         image_format: 'jpeg',
         jpeg_quality: 90
     });
     Webcam.attach('#webcam');
+    $('#webcam-result').show();
 }
 
 function takeSnapshot() {
@@ -28,6 +27,7 @@ function uploadSnap() {
         success: function (data) {
             alert(data.message);
             $('#webcam-container').hide();
+            $('#webcam-result').hide();
             Webcam.reset();
         },
         error: function (e) {

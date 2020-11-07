@@ -1,6 +1,8 @@
 let user;
 
 $(document).ready(function () {
+    checkLoggedIn()
+
     $.get({
         url: "/api/user",
         headers: {
@@ -12,7 +14,8 @@ $(document).ready(function () {
             getCourseData(user);
         },
         error: function (e) {
-            console.log("ERROR : ", e);
+            Cookies.remove('access_token')
+            checkLoggedIn()
         }
     });
 })
