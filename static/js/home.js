@@ -2,7 +2,7 @@ let user;
 
 $(document).ready(function () {
     checkLoggedIn()
-    $("#content").show();
+    $("#content").fadeIn();
 
     $.get({
         url: "/api/user",

@@ -6,7 +6,7 @@ $(document).ready(function () {
 
     $('#webcam-container').hide();
     $('#webcam-result').hide();
-    $("#content").show();
+    $("#content").fadeIn();
 
     $.get({
         url: "/api/user",

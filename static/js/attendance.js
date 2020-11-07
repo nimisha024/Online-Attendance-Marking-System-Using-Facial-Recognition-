@@ -16,7 +16,7 @@ function takeSnapshot() {
     $("#upload-button").attr("disabled", false);
     Webcam.snap(function (data_uri) {
         img_data = data_uri
-        $('#result').html('<img class="webcam-image" src="' + data_uri + '"/>')
+        $('#result').html('<img src="' + data_uri + '"/>')
     });
 }
 
