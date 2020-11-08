@@ -104,6 +104,8 @@ function showAttendanceDetails(data) {
     let thead, tbody, trow;
     const attendanceInfo = $("#attendance-info")
     const attendanceTable = $("#attendance-table")
+    attendanceInfo.empty()
+    attendanceTable.empty()
 
     if (user.is_student) {
         let presentClasses = data.filter(x => x.is_present).length

@@ -1,16 +1,19 @@
 let img_data;
 
 function configure() {
+    $('#webcam-result').show();
     const width = $("#webcam").width();
     Webcam.set({
-        width: width,
-        height: width * 3 / 4,
+        width: 'auto',
+        height: 'auto',
+        dest_width: width,
+        dest_height: width * 3 / 4,
         image_format: 'jpeg',
         jpeg_quality: 90
     });
     Webcam.attach('#webcam');
-    $('#webcam-result').show();
 }
+
 
 function takeSnapshot() {
     $("#upload-button").attr("disabled", false);
@@ -32,6 +35,7 @@ function uploadSnap() {
             $('#webcam-container').hide();
             $('#webcam-result').hide();
             Webcam.reset();
+            getAttendanceData();
         },
         error: function (e) {
             console.log("ERROR : ", e);

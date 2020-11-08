@@ -66,13 +66,14 @@ class Attendance(Resource):
 
                             match = fr.recognize_face(image_path)
                             if int(match) == user_id:
-                                mark_attendance_present(course_id, user_id)
+                                class_id = get_class_id(course_id)
+                                mark_attendance_present(class_id, user_id)
                                 return {'message': 'Your attendance was marked successfully'}, 200
                             else:
                                 return {'message': 'You were not found in the image'}, 200
                         except Exception as e:
                             print(e)
-                            return {"message": "Processing error"}, 500
+                            return {'message': 'You were not found in the image'}, 200
                         finally:
                             if os.path.exists(image_path):
                                 os.remove(image_path)
