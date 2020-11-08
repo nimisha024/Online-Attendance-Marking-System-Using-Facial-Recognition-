@@ -245,8 +245,10 @@ def mark_attendance_present(course_id, student_id):
     connection = get_connection()
     cursor = connection.cursor()
 
-    query = 'INSERT INTO attendance(class_id, student_id, is_present) values (?, ?, ?)'
-    cursor.execute(query, (course_id, student_id, True))
+    query = 'INSERT INTO attendance(class_id, student_id, is_present) VALUES (?, ?, TRUE)' \
+            'ON CONFLICT ' \
+            'DO UPDATE SET is_present = TRUE'
+    cursor.execute(query, (course_id, student_id,))
     connection.close()
 
 
@@ -254,7 +256,9 @@ def mark_attendance_absent(class_id, student_ids):
     connection = get_connection()
     cursor = connection.cursor()
 
-    query = 'INSERT INTO attendance(class_id, student_id, is_present) values (?, ?, ?)'
-    records = [(class_id, student_id, False) for student_id in student_ids]
+    query = 'INSERT INTO attendance(class_id, student_id, is_present) VALUES (?, ?, FALSE)' \
+            'ON CONFLICT ' \
+            'DO UPDATE SET is_present = FALSE'
+    records = [(class_id, student_id,) for student_id in student_ids]
     cursor.executemany(query, records)
     connection.close()
