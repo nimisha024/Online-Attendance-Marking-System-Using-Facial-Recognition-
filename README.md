@@ -1,4 +1,5 @@
-Add intro about your project here.
+The website is targeted at solving the issue which many faculties face during online classes which is the attendance for the respective session. It is intended to  ensure that the student really attend the meeting and not just leave the meeting with passive video on.
+
 You can also refer:
 * https://dev.to/scottydocs/how-to-write-a-kickass-readme-5af9
 * https://blog.bitsrc.io/how-to-write-beautiful-and-meaningful-readme-md-for-your-next-project-897045e3f991?gi=fb7d021f516d
